@@ -1,0 +1,13 @@
+package com.group1.recruitment.enums;
+
+public enum EventType {
+    SIGN_IN_SUCCESS,
+    SIGN_IN_FAILURE,
+    ACCOUNT_CREATED,
+    ACCOUNT_DEACTIVATED,
+    ACCOUNT_UNLOCKED,
+    ACCOUNT_LOCKED,
+    APPLICATION_STATUS_CHANGED,
+    CV_DOWNLOADED,
+    EVALUATION_SUBMITTED
+}
