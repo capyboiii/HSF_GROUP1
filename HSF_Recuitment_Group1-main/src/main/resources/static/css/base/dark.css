@@ -1,0 +1,127 @@
+/* ============================================================
+   Dark mode — follows ui-skill.md §10 (Dark Mode & Atmospheric UX).
+   - Driven by Bootstrap's data-bs-theme="dark" on <html>.
+   - Navy tonal elevation (NO box-shadow in dark).
+   - Base #0C1222 · Surface-1 #151B2E · Surface-2 #1A1F3A · text #F1F5F9.
+   ============================================================ */
+
+/* Smooth theme switch on the elements that change colour (both directions). */
+body,
+.app-card, .app-navbar, .app-sidebar,
+.app-table, .app-table th, .app-table td,
+.app-form-control, .form-control, .form-select,
+.card, .dropdown-menu, .modal-content, .nav-link, .app-badge, .theme-toggle {
+  transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+}
+
+[data-bs-theme="dark"] {
+  /* Bootstrap 5.3 theme variables → navy palette */
+  --bs-body-bg: #0C1222;
+  --bs-body-color: #F1F5F9;
+  --bs-border-color: #2A3350;
+  --bs-secondary-bg: #151B2E;
+  --bs-tertiary-bg: #1A1F3A;
+  --bs-secondary-color: #A9B4CC;
+  --bs-emphasis-color: #F1F5F9;
+  --bs-card-bg: #151B2E;
+  --bs-card-border-color: #2A3350;
+  --bs-dropdown-bg: #1A1F3A;
+  --bs-dropdown-border-color: #2A3350;
+  --bs-dropdown-link-color: #F1F5F9;
+  --bs-modal-bg: #1A1F3A;
+
+  /* Project design tokens */
+  --background: #0C1222;
+  --surface: #151B2E;
+  --surface-2: #1A1F3A;
+  --gray-text: #F1F5F9;
+  --gray-border: #2A3350;
+  --accent: #C7D6F0;
+  color-scheme: dark;
+}
+
+/* Page + typography */
+[data-bs-theme="dark"] body { background-color: var(--background); color: var(--gray-text); }
+[data-bs-theme="dark"] h1,
+[data-bs-theme="dark"] h2,
+[data-bs-theme="dark"] .app-card-title,
+[data-bs-theme="dark"] .app-navbar-brand { color: var(--accent); }
+[data-bs-theme="dark"] a { color: var(--accent); }
+[data-bs-theme="dark"] a:hover { color: #E2ECFB; }
+
+/* Surfaces — tonal elevation, no shadows */
+[data-bs-theme="dark"] .app-card,
+[data-bs-theme="dark"] .app-table-wrapper,
+[data-bs-theme="dark"] .app-navbar,
+[data-bs-theme="dark"] .card {
+  background-color: var(--surface);
+  border-color: var(--gray-border);
+  color: var(--gray-text);
+  box-shadow: none !important;
+}
+[data-bs-theme="dark"] .modal-content,
+[data-bs-theme="dark"] .dropdown-menu { background-color: var(--surface-2); border-color: var(--gray-border); }
+
+/* Sidebar — deep navy for atmosphere */
+[data-bs-theme="dark"] .app-sidebar { background-color: #0A0F1D; border-right: 1px solid var(--gray-border); }
+
+/* Tables */
+[data-bs-theme="dark"] .app-table th { background-color: #0F1526; color: var(--accent); border-color: var(--gray-border); }
+[data-bs-theme="dark"] .app-table td { color: var(--gray-text); border-color: var(--gray-border); }
+[data-bs-theme="dark"] .app-table tbody tr:hover { background-color: rgba(255, 255, 255, 0.03); }
+
+/* Forms */
+[data-bs-theme="dark"] .app-form-control,
+[data-bs-theme="dark"] .form-control,
+[data-bs-theme="dark"] .form-select {
+  background-color: #0A0F1D;
+  color: var(--gray-text);
+  border-color: var(--gray-border);
+}
+[data-bs-theme="dark"] .app-form-control::placeholder,
+[data-bs-theme="dark"] .form-control::placeholder { color: #6B7690; }
+[data-bs-theme="dark"] .app-form-control:focus,
+[data-bs-theme="dark"] .form-control:focus,
+[data-bs-theme="dark"] .form-select:focus {
+  background-color: #0A0F1D; color: var(--gray-text);
+  border-color: var(--accent); box-shadow: 0 0 0 0.2rem rgba(199, 214, 240, 0.12);
+}
+[data-bs-theme="dark"] .app-form-label { color: var(--gray-text); }
+
+/* Bootstrap helpers used across templates */
+[data-bs-theme="dark"] .bg-light { background-color: var(--background) !important; }
+[data-bs-theme="dark"] .text-muted { color: #94A3B8 !important; }
+[data-bs-theme="dark"] .text-dark { color: var(--gray-text) !important; }
+[data-bs-theme="dark"] .border-top,
+[data-bs-theme="dark"] .border-bottom { border-color: var(--gray-border) !important; }
+[data-bs-theme="dark"] .shadow-sm,
+[data-bs-theme="dark"] .shadow { box-shadow: none !important; }
+
+/* Tabs */
+[data-bs-theme="dark"] .nav-tabs { border-bottom-color: var(--gray-border); }
+[data-bs-theme="dark"] .nav-tabs .nav-link { color: #94A3B8; }
+[data-bs-theme="dark"] .nav-tabs .nav-link.active {
+  background-color: var(--surface); color: var(--accent);
+  border-color: var(--gray-border) var(--gray-border) var(--surface);
+}
+
+/* Dropdown items */
+[data-bs-theme="dark"] .dropdown-item { color: var(--gray-text); }
+[data-bs-theme="dark"] .dropdown-item:hover { background-color: #24304F; color: #fff; }
+[data-bs-theme="dark"] .dropdown-divider { border-top-color: var(--gray-border); }
+
+/* Misc */
+[data-bs-theme="dark"] .progress { background-color: #24304F; }
+[data-bs-theme="dark"] hr { border-color: var(--gray-border); opacity: 1; }
+
+/* Theme toggle button */
+.theme-toggle {
+  background: transparent;
+  border: 1px solid var(--gray-border, #E5E7EB);
+  color: inherit;
+  border-radius: var(--radius, 8px);
+  width: 36px; height: 36px;
+  display: inline-flex; align-items: center; justify-content: center;
+  cursor: pointer;
+}
+.theme-toggle:hover { border-color: var(--accent, #234B7C); }

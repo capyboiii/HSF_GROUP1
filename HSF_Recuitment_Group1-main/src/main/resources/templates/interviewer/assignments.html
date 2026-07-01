@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/app :: appLayout('My Interviews', ~{::section})}">
+<body>
+<section>
+  <h1 class="mb-3">My Interview Assignments</h1>
+
+  <div class="app-card">
+    <div th:if="${interviews.isEmpty()}" class="text-muted py-3">You have no interview assignments yet.</div>
+    <div class="app-table-wrapper" th:unless="${interviews.isEmpty()}">
+      <table class="app-table">
+        <thead><tr><th>Candidate</th><th>Job</th><th>Date</th><th>Time</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+          <tr th:each="iv : ${interviews}">
+            <td class="fw-semibold" th:text="${iv.application.candidate != null and iv.application.candidate.user != null ? iv.application.candidate.user.fullName : '—'}">Name</td>
+            <td th:text="${iv.application.jobPosting.title}">Job</td>
+            <td th:text="${iv.interviewDate}">date</td>
+            <td th:text="${iv.interviewTime}">time</td>
+            <td><span class="app-badge" th:classappend="${iv.status.name() == 'EVALUATED'} ? ' app-badge-success' : ' app-badge-warning'" th:text="${iv.status}">STATUS</span></td>
+            <td><a th:href="@{'/applications/' + ${iv.application.id}}" class="app-btn app-btn-outline btn-sm">Open</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+</body>
+</html>

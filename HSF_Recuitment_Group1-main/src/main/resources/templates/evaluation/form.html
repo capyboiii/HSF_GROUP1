@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/app :: appLayout('Evaluation Form', ~{::section})}">
+<body>
+<section>
+  <nav class="mb-3"><a th:href="@{'/applications/' + ${app.id}}">&larr; Application Detail</a></nav>
+  <h1 class="mb-1">Evaluation Form</h1>
+  <p class="text-muted">
+    Candidate: <strong th:text="${app.candidate != null and app.candidate.user != null ? app.candidate.user.fullName : '—'}">Name</strong>
+    · Job: <strong th:text="${app.jobPosting.title}">Job</strong>
+    · Interview: <span th:text="${interview.interviewDate} + ' ' + ${interview.interviewTime}"></span>
+  </p>
+
+  <!-- Already submitted: read-only -->
+  <div class="app-card" style="max-width: 640px;" th:if="${alreadyEvaluated}">
+    <div class="app-alert app-alert-success mb-3"><i class="bi bi-check-circle" style="font-size:20px;"></i>
+      <span th:text="'You submitted this evaluation on ' + (${evaluation != null and evaluation.submittedAt != null} ? ${#temporals.format(evaluation.submittedAt, 'yyyy-MM-dd')} : '')">Submitted.</span></div>
+    <div th:if="${evaluation != null}">
+      <div class="mb-2 text-warning fs-5" th:text="${'★'.repeat(evaluation.rating)} + ${'☆'.repeat(5 - evaluation.rating)}">stars</div>
+      <div style="white-space: pre-wrap;" th:text="${evaluation.feedback}">feedback</div>
+    </div>
+  </div>
+
+  <!-- Editable form -->
+  <div class="app-card" style="max-width: 640px;" th:unless="${alreadyEvaluated}">
+    <form th:action="@{'/applications/' + ${app.id} + '/evaluate'}" method="post">
+      <input type="hidden" name="interviewId" th:value="${interview.id}">
+      <div class="mb-3">
+        <label class="app-form-label d-block">Rating *</label>
+        <div class="btn-group" role="group">
+          <th:block th:each="n : ${ {1,2,3,4,5} }">
+            <input type="radio" class="btn-check" name="rating" th:id="'star' + ${n}" th:value="${n}"
+                   th:checked="${rating != null and rating == n}" required>
+            <label class="btn btn-outline-warning" th:for="'star' + ${n}" th:text="${n} + '★'">1</label>
+          </th:block>
+        </div>
+        <div class="text-danger small" th:if="${errors != null and errors.rating}" th:text="${errors.rating}"></div>
+      </div>
+      <div class="mb-3">
+        <label class="app-form-label">Written feedback *</label>
+        <textarea name="feedback" class="app-form-control" rows="5" th:text="${feedback}" required></textarea>
+        <div class="text-danger small" th:if="${errors != null and errors.feedback}" th:text="${errors.feedback}"></div>
+      </div>
+      <div class="app-alert app-alert-warning mb-3"><i class="bi bi-exclamation-triangle" style="font-size:20px;"></i>
+        <span>Once submitted, your evaluation cannot be edited or withdrawn.</span></div>
+      <div class="d-flex gap-2 border-top pt-3">
+        <button type="submit" class="app-btn app-btn-primary">Submit Evaluation</button>
+        <a th:href="@{'/applications/' + ${app.id}}" class="app-btn app-btn-secondary">Cancel</a>
+      </div>
+    </form>
+  </div>
+</section>
+</body>
+</html>

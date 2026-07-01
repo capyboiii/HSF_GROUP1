@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/app :: appLayout('Job Form', ~{::section})}">
+<body>
+<section>
+  <h1 class="mb-4" th:text="${editMode} ? 'Edit Job Posting' : 'Create Job Posting'">Job Form</h1>
+
+  <div th:if="${editMode and job != null and job.status.name() == 'CLOSED'}" class="app-alert app-alert-warning">
+    <i class="bi bi-info-circle" style="font-size:20px;"></i><span>Closed job postings cannot be edited.</span>
+  </div>
+
+  <div class="app-card" style="max-width: 760px;">
+    <form th:action="${editMode} ? @{'/manage/jobs/' + ${job.id}} : @{/manage/jobs}" method="post" th:object="${jobForm}">
+      <div class="mb-3">
+        <label class="app-form-label">Job title *</label>
+        <input class="app-form-control" th:field="*{title}" maxlength="200">
+        <div class="text-danger small" th:if="${errors != null and errors.title}" th:text="${errors.title}"></div>
+      </div>
+      <div class="row g-3">
+        <div class="col-md-6 mb-3">
+          <label class="app-form-label">Department *</label>
+          <input class="app-form-control" th:field="*{department}" maxlength="100">
+          <div class="text-danger small" th:if="${errors != null and errors.department}" th:text="${errors.department}"></div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="app-form-label">Location *</label>
+          <input class="app-form-control" th:field="*{location}" maxlength="100">
+          <div class="text-danger small" th:if="${errors != null and errors.location}" th:text="${errors.location}"></div>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="app-form-label">Job description *</label>
+        <textarea class="app-form-control" rows="5" th:field="*{description}"></textarea>
+        <div class="text-danger small" th:if="${errors != null and errors.description}" th:text="${errors.description}"></div>
+      </div>
+      <div class="mb-3">
+        <label class="app-form-label">Requirements</label>
+        <textarea class="app-form-control" rows="4" th:field="*{requirements}"></textarea>
+      </div>
+      <div class="row g-3">
+        <div class="col-md-6 mb-3">
+          <label class="app-form-label">Salary range</label>
+          <input class="app-form-control" th:field="*{salaryRange}" maxlength="100" placeholder="e.g. 15–20M VND">
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="app-form-label">Application deadline</label>
+          <input type="date" class="app-form-control" th:field="*{applicationDeadline}">
+          <div class="text-danger small" th:if="${errors != null and errors.applicationDeadline}" th:text="${errors.applicationDeadline}"></div>
+        </div>
+      </div>
+      <div class="d-flex gap-2 border-top pt-3" th:unless="${editMode and job != null and job.status.name() == 'CLOSED'}">
+        <button type="submit" class="app-btn app-btn-primary" th:text="${editMode} ? 'Save Changes' : 'Save as Draft'">Save</button>
+        <a th:href="${editMode} ? @{'/manage/jobs/' + ${job.id}} : @{/manage/jobs}" class="app-btn app-btn-secondary">Cancel</a>
+      </div>
+      <div class="border-top pt-3" th:if="${editMode and job != null and job.status.name() == 'CLOSED'}">
+        <a th:href="@{'/manage/jobs/' + ${job.id}}" class="app-btn app-btn-secondary">Back to Job Detail</a>
+      </div>
+    </form>
+  </div>
+</section>
+</body>
+</html>

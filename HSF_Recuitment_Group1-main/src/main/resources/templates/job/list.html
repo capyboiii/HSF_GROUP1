@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/app :: appLayout('Job Postings', ~{::section})}">
+<body>
+<section>
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="mb-0">Job Postings</h1>
+    <a th:href="@{/manage/jobs/new}" class="app-btn app-btn-primary"><i class="bi bi-plus-lg me-1"></i>Create New Job</a>
+  </div>
+
+  <!-- Status tabs -->
+  <ul class="nav nav-tabs mb-3">
+    <li class="nav-item" th:each="t : ${ {'ALL','DRAFT','ACTIVE','CLOSED'} }">
+      <a class="nav-link" th:classappend="${activeTab == t} ? ' active fw-semibold' : ''"
+         th:href="@{/manage/jobs(status=${t}, q=${q})}">
+        <span th:text="${#strings.capitalize(#strings.toLowerCase(t))}">Tab</span>
+        <span class="badge bg-secondary" th:text="${tabCounts.get(t)}">0</span>
+      </a>
+    </li>
+  </ul>
+
+  <form method="get" class="mb-3" style="max-width: 320px;">
+    <input type="hidden" name="status" th:value="${activeTab}">
+    <div class="input-group">
+      <input name="q" class="app-form-control" th:value="${q}" placeholder="Search by job title...">
+      <button class="app-btn app-btn-secondary"><i class="bi bi-search"></i></button>
+    </div>
+  </form>
+
+  <div th:if="${jobs.isEmpty()}" class="text-muted py-3">No job postings match your current filters.</div>
+
+  <div class="row g-3">
+    <div class="col-md-6 col-lg-4" th:each="job : ${jobs}">
+      <div class="app-card h-100 d-flex flex-column">
+        <div class="d-flex justify-content-between align-items-start">
+          <h3 class="app-card-title mb-1"><a th:href="@{'/manage/jobs/' + ${job.id}}" th:text="${job.title}">Title</a></h3>
+          <span class="app-badge"
+                th:classappend="${job.status.name() == 'ACTIVE'} ? ' app-badge-success' : (${job.status.name() == 'DRAFT'} ? ' app-badge-warning' : ' app-badge-secondary')"
+                th:text="${job.status}">STATUS</span>
+        </div>
+        <div class="text-muted small mb-2">
+          <span th:text="${job.department}">Dept</span> · <span th:text="${job.location}">Loc</span>
+        </div>
+        <div class="small mb-1">Applications: <strong th:text="${appCounts.get(job.id)}">0</strong></div>
+        <div class="small text-muted mb-3" th:if="${job.applicationDeadline != null}">
+          Deadline: <span th:text="${job.applicationDeadline}"></span>
+        </div>
+        <div class="mt-auto d-flex flex-wrap gap-1">
+          <a th:if="${job.status.name() == 'DRAFT' or job.status.name() == 'ACTIVE'}"
+             th:href="@{'/manage/jobs/' + ${job.id} + '/edit'}" class="app-btn app-btn-outline btn-sm">Edit</a>
+          <form th:if="${job.status.name() == 'DRAFT'}" th:action="@{'/manage/jobs/' + ${job.id} + '/publish'}" method="post"
+                onsubmit="return confirm('Publish this job?');">
+            <button class="app-btn app-btn-primary btn-sm">Publish</button>
+          </form>
+          <form th:if="${job.status.name() == 'ACTIVE'}" th:action="@{'/manage/jobs/' + ${job.id} + '/close'}" method="post"
+                onsubmit="return confirm('Close this job? New applications will stop.');">
+            <button class="app-btn app-btn-secondary btn-sm">Close</button>
+          </form>
+          <form th:if="${job.status.name() == 'DRAFT' and appCounts.get(job.id) == 0}"
+                th:action="@{'/manage/jobs/' + ${job.id} + '/delete'}" method="post"
+                onsubmit="return confirm('Delete this draft job?');">
+            <button class="app-btn app-btn-danger btn-sm">Delete</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</body>
+</html>

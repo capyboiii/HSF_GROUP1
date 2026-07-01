@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/app :: appLayout('Job Detail', ~{::section})}">
+<body>
+<section>
+  <nav class="mb-3"><a th:href="@{/jobs}">&larr; Open Positions</a></nav>
+
+  <h1 class="mb-1" th:text="${job.title}">Title</h1>
+  <p class="text-muted">
+    <span th:text="${job.department}">Dept</span> · <span th:text="${job.location}">Loc</span>
+    <span th:if="${job.applicationDeadline != null}"> · Deadline: <span th:text="${job.applicationDeadline}"></span></span>
+  </p>
+
+  <div class="app-card mb-3">
+    <h3 class="app-card-title">Job Description</h3>
+    <div style="white-space: pre-wrap;" th:text="${job.description}">Description</div>
+    <div th:if="${job.requirements != null and !job.requirements.isEmpty()}">
+      <h3 class="app-card-title mt-3">Requirements</h3>
+      <div style="white-space: pre-wrap;" th:text="${job.requirements}">Requirements</div>
+    </div>
+  </div>
+
+  <!-- Not active -->
+  <div th:unless="${isActive}" class="app-alert app-alert-warning">
+    <i class="bi bi-info-circle" style="font-size:20px;"></i><span>This position is no longer accepting applications.</span>
+  </div>
+
+  <!-- Guest prompt -->
+  <div th:if="${isActive and isGuest}" class="app-alert app-alert-info">
+    <i class="bi bi-info-circle" style="font-size:20px;"></i>
+    <span>Sign in or create an account to apply. <a th:href="@{/login}">Sign in</a> · <a th:href="@{/register}">Create account</a></span>
+  </div>
+
+  <!-- Already applied -->
+  <div th:if="${isActive and alreadyApplied}" class="app-alert app-alert-warning">
+    <i class="bi bi-info-circle" style="font-size:20px;"></i>
+    <span>You have already applied for this position. <a th:href="@{/my-applications}">Track its status in My Applications.</a></span>
+  </div>
+
+  <!-- Apply form -->
+  <div th:if="${canApply}" class="app-card">
+    <h3 class="app-card-title mb-3">Apply Now</h3>
+    <form th:action="@{'/jobs/' + ${job.id} + '/apply'}" method="post" enctype="multipart/form-data">
+      <div class="mb-3">
+        <label class="app-form-label">Cover letter (optional)</label>
+        <textarea name="coverLetter" class="app-form-control" rows="4"></textarea>
+      </div>
+      <div class="mb-3">
+        <label class="app-form-label">CV file * (PDF or DOCX, max 5 MB)</label>
+        <input type="file" name="cv" class="app-form-control" accept=".pdf,.docx" required>
+      </div>
+      <button type="submit" class="app-btn app-btn-primary">Submit Application</button>
+    </form>
+  </div>
+</section>
+</body>
+</html>

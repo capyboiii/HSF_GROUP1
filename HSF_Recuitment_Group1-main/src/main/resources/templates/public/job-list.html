@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/app :: appLayout('Open Positions', ~{::section})}">
+<body>
+<section>
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="mb-0">Open Positions</h1>
+    <a th:if="${isGuest}" th:href="@{/login}" class="app-btn app-btn-outline btn-sm">Sign In</a>
+  </div>
+
+  <div th:if="${isGuest}" class="app-alert app-alert-info mb-3">
+    <i class="bi bi-info-circle" style="font-size:20px;"></i>
+    <span>Sign in or <a th:href="@{/register}">create an account</a> to apply for positions.
+      <a th:href="@{/login}">Sign in</a></span>
+  </div>
+
+  <form method="get" class="app-card mb-3">
+    <div class="row g-2 align-items-end">
+      <div class="col-md-5">
+        <label class="app-form-label">Department</label>
+        <select name="department" class="app-form-control">
+          <option value="">All departments</option>
+          <option th:each="d : ${departments}" th:value="${d}" th:text="${d}" th:selected="${department == d}"></option>
+        </select>
+      </div>
+      <div class="col-md-5">
+        <label class="app-form-label">Location</label>
+        <select name="location" class="app-form-control">
+          <option value="">All locations</option>
+          <option th:each="l : ${locations}" th:value="${l}" th:text="${l}" th:selected="${location == l}"></option>
+        </select>
+      </div>
+      <div class="col-md-2"><button class="app-btn app-btn-secondary w-100">Filter</button></div>
+    </div>
+  </form>
+
+  <div th:if="${jobs.isEmpty()}" class="text-muted py-3">
+    <span th:if="${department == null and location == null}">There are currently no open positions. Please check back later.</span>
+    <span th:unless="${department == null and location == null}">No open positions match your current filters.</span>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-md-6 col-lg-4" th:each="job : ${jobs}">
+      <div class="app-card h-100 d-flex flex-column">
+        <h3 class="app-card-title mb-1" th:text="${job.title}">Title</h3>
+        <div class="text-muted small mb-2"><span th:text="${job.department}">Dept</span> · <span th:text="${job.location}">Loc</span></div>
+        <div class="small text-muted mb-3" th:if="${job.applicationDeadline != null}">Deadline: <span th:text="${job.applicationDeadline}"></span></div>
+        <a th:href="@{'/jobs/' + ${job.id}}" class="app-btn app-btn-primary btn-sm mt-auto">View Details</a>
+      </div>
+    </div>
+  </div>
+</section>
+</body>
+</html>

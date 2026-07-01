@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/app :: appLayout('Interview Assignment', ~{::section})}">
+<body>
+<section>
+  <nav class="mb-3"><a th:href="@{'/applications/' + ${app.id}}">&larr; Application Detail</a></nav>
+  <h1 class="mb-1">Interview Assignment</h1>
+  <p class="text-muted">
+    Candidate: <strong th:text="${app.candidate != null and app.candidate.user != null ? app.candidate.user.fullName : '—'}">Name</strong>
+    · Job: <strong th:text="${app.jobPosting.title}">Job</strong>
+  </p>
+
+  <div th:if="${interviewers.isEmpty()}" class="app-alert app-alert-warning">
+    <i class="bi bi-exclamation-triangle" style="font-size:20px;"></i>
+    <span>No Interviewers are available. Ask Admin to create Interviewer accounts first.</span>
+  </div>
+
+  <div class="app-card" style="max-width: 640px;">
+    <form th:action="@{'/applications/' + ${app.id} + '/assign-interview'}" method="post">
+      <div class="mb-3">
+        <label class="app-form-label">Interviewer *</label>
+        <select name="interviewerId" class="app-form-control" th:disabled="${interviewers.isEmpty()}">
+          <option value="" disabled selected>Select an interviewer...</option>
+          <option th:each="iv : ${interviewers}" th:value="${iv.id}" th:text="${iv.fullName}"></option>
+        </select>
+        <div class="text-danger small" th:if="${errors != null and errors.interviewerId}" th:text="${errors.interviewerId}"></div>
+      </div>
+      <div class="row g-3">
+        <div class="col-md-6 mb-3">
+          <label class="app-form-label">Interview date *</label>
+          <input type="date" name="interviewDate" class="app-form-control" th:min="${today}" required>
+          <div class="text-danger small" th:if="${errors != null and errors.interviewDate}" th:text="${errors.interviewDate}"></div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="app-form-label">Interview time (HH:mm) *</label>
+          <input type="time" name="interviewTime" class="app-form-control" required>
+          <div class="text-danger small" th:if="${errors != null and errors.interviewTime}" th:text="${errors.interviewTime}"></div>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="app-form-label">Location or meeting link</label>
+        <input name="locationOrLink" class="app-form-control" maxlength="500" placeholder="Room name or meeting URL">
+        <div class="text-danger small" th:if="${errors != null and errors.locationOrLink}" th:text="${errors.locationOrLink}"></div>
+      </div>
+      <div class="d-flex gap-2 border-top pt-3">
+        <button type="submit" class="app-btn app-btn-primary" th:disabled="${interviewers.isEmpty()}">Assign and Schedule</button>
+        <a th:href="@{'/applications/' + ${app.id}}" class="app-btn app-btn-secondary">Cancel</a>
+      </div>
+    </form>
+  </div>
+</section>
+</body>
+</html>

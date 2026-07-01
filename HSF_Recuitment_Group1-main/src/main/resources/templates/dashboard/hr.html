@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/app :: appLayout('HR Dashboard', ~{::section})}">
+<body>
+<section>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="mb-0">HR Dashboard</h1>
+    <a th:href="@{/manage/jobs/new}" class="app-btn app-btn-primary"><i class="bi bi-plus-lg me-1"></i>Create New Job</a>
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-md-4">
+      <a th:href="@{/manage/jobs(status='ACTIVE')}" class="text-decoration-none">
+        <div class="app-card"><div class="text-muted">Active jobs</div>
+          <div class="display-6 fw-bold" th:text="${stats.activeJobs()}">0</div></div>
+      </a>
+    </div>
+    <div class="col-md-4">
+      <div class="app-card"><div class="text-muted">Applications awaiting review</div>
+        <div class="display-6 fw-bold" th:text="${stats.applicationsAwaitingReview()}">0</div></div>
+    </div>
+    <div class="col-md-4">
+      <div class="app-card"><div class="text-muted">Upcoming interviews (7 days)</div>
+        <div class="display-6 fw-bold" th:text="${stats.upcomingInterviews()}">0</div></div>
+    </div>
+  </div>
+
+  <div class="app-card">
+    <h3 class="app-card-title mb-3">Active Job Postings</h3>
+    <div th:if="${activeJobs.isEmpty()}" class="text-muted py-3">
+      You have no active job postings. Create one to start receiving applications.
+    </div>
+    <div class="app-table-wrapper" th:unless="${activeJobs.isEmpty()}">
+      <table class="app-table">
+        <thead><tr><th>Job title</th><th>Department</th><th>Location</th><th>Deadline</th><th></th></tr></thead>
+        <tbody>
+          <tr th:each="job : ${activeJobs}">
+            <td class="fw-semibold"><a th:href="@{'/manage/jobs/' + ${job.id}}" th:text="${job.title}">Title</a></td>
+            <td th:text="${job.department}">Dept</td>
+            <td th:text="${job.location}">Loc</td>
+            <td th:text="${job.applicationDeadline != null ? job.applicationDeadline : '—'}">—</td>
+            <td><a th:href="@{/reports(jobId=${job.id})}" class="app-btn app-btn-outline btn-sm">Report</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/app :: appLayout('Job Detail', ~{::section})}">
+<body>
+<section>
+  <nav class="mb-3"><a th:href="@{/manage/jobs}">&larr; Jobs</a></nav>
+
+  <div class="d-flex justify-content-between align-items-start mb-3">
+    <h1 class="mb-0">
+      <span th:text="${job.title}">Title</span>
+      <span class="app-badge ms-2"
+            th:classappend="${job.status.name() == 'ACTIVE'} ? ' app-badge-success' : (${job.status.name() == 'DRAFT'} ? ' app-badge-warning' : ' app-badge-secondary')"
+            th:text="${job.status}">STATUS</span>
+    </h1>
+    <div class="d-flex flex-wrap gap-1">
+      <a th:if="${job.status.name() == 'DRAFT' or job.status.name() == 'ACTIVE'}"
+         th:href="@{'/manage/jobs/' + ${job.id} + '/edit'}" class="app-btn app-btn-outline btn-sm">Edit</a>
+      <form th:if="${job.status.name() == 'DRAFT'}" th:action="@{'/manage/jobs/' + ${job.id} + '/publish'}" method="post"
+            onsubmit="return confirm('Publish this job?');"><button class="app-btn app-btn-primary btn-sm">Publish</button></form>
+      <form th:if="${job.status.name() == 'ACTIVE'}" th:action="@{'/manage/jobs/' + ${job.id} + '/close'}" method="post"
+            onsubmit="return confirm('Closing will stop accepting new applications. Existing applications are not affected.');">
+        <button class="app-btn app-btn-danger btn-sm">Close</button></form>
+      <form th:if="${job.status.name() == 'DRAFT' and applicationCount == 0}" th:action="@{'/manage/jobs/' + ${job.id} + '/delete'}" method="post"
+            onsubmit="return confirm('Delete this draft job?');"><button class="app-btn app-btn-danger btn-sm">Delete</button></form>
+    </div>
+  </div>
+
+  <div th:if="${job.status.name() == 'CLOSED'}" class="app-alert app-alert-warning">
+    <i class="bi bi-info-circle" style="font-size:20px;"></i><span>This posting is closed and no longer accepting applications.</span>
+  </div>
+
+  <ul class="nav nav-tabs mb-3">
+    <li class="nav-item"><span class="nav-link active fw-semibold">Overview</span></li>
+    <li class="nav-item"><a class="nav-link" th:href="@{'/manage/jobs/' + ${job.id} + '/applications'}">Applications (<span th:text="${applicationCount}">0</span>)</a></li>
+    <li class="nav-item"><a class="nav-link" th:href="@{/reports(jobId=${job.id})}">Report</a></li>
+  </ul>
+
+  <div class="row g-3">
+    <div class="col-lg-7">
+      <div class="app-card">
+        <h3 class="app-card-title mb-3">Job Information</h3>
+        <dl class="row mb-0">
+          <dt class="col-sm-4 text-muted">Department</dt><dd class="col-sm-8" th:text="${job.department}"></dd>
+          <dt class="col-sm-4 text-muted">Location</dt><dd class="col-sm-8" th:text="${job.location}"></dd>
+          <dt class="col-sm-4 text-muted">Salary range</dt><dd class="col-sm-8" th:text="${job.salaryRange != null ? job.salaryRange : '—'}"></dd>
+          <dt class="col-sm-4 text-muted">Deadline</dt><dd class="col-sm-8" th:text="${job.applicationDeadline != null ? job.applicationDeadline : '—'}"></dd>
+          <dt class="col-sm-4 text-muted">Created by</dt><dd class="col-sm-8" th:text="${job.createdBy != null ? job.createdBy.fullName : '—'}"></dd>
+          <dt class="col-sm-4 text-muted">Created at</dt><dd class="col-sm-8" th:text="${job.createdAt != null ? #temporals.format(job.createdAt, 'yyyy-MM-dd') : '—'}"></dd>
+          <dt class="col-sm-4 text-muted">Description</dt><dd class="col-sm-8" style="white-space: pre-wrap;" th:text="${job.description}"></dd>
+          <dt class="col-sm-4 text-muted">Requirements</dt><dd class="col-sm-8" style="white-space: pre-wrap;" th:text="${job.requirements != null ? job.requirements : '—'}"></dd>
+        </dl>
+      </div>
+    </div>
+    <div class="col-lg-5">
+      <div class="app-card">
+        <h3 class="app-card-title mb-1">Pipeline Summary</h3>
+        <div class="text-muted mb-3">Total applications: <strong th:text="${applicationCount}">0</strong></div>
+        <div th:each="entry : ${pipeline}" class="mb-2">
+          <div class="d-flex justify-content-between small">
+            <span th:text="${entry.key}">Stage</span><span th:text="${entry.value}">0</span>
+          </div>
+          <div class="progress" style="height: 8px;">
+            <div class="progress-bar"
+                 th:style="'width:' + ${applicationCount > 0 ? (entry.value * 100 / applicationCount) : 0} + '%'"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</body>
+</html>
