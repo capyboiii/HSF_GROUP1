@@ -6,7 +6,7 @@
   <h1 class="mb-4" th:text="${editMode} ? 'Edit Job Posting' : 'Create Job Posting'">Job Form</h1>
 
   <div th:if="${editMode and job != null and job.status.name() == 'CLOSED'}" class="app-alert app-alert-warning">
-    <i class="bi bi-info-circle" style="font-size:20px;"></i><span>Closed job postings cannot be edited.</span>
+    <i class="ph-bold ph-info" style="font-size:20px;"></i><span>Closed job postings cannot be edited.</span>
   </div>
 
   <div class="app-card" style="max-width: 760px;">

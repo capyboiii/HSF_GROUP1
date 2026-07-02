@@ -6,7 +6,7 @@
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="mb-0">User Management</h1>
     <button class="app-btn app-btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#createForm">
-      <i class="bi bi-plus-lg me-1"></i>Create Account
+      <i class="ph-bold ph-plus me-1"></i>Create Account
     </button>
   </div>
 
@@ -91,7 +91,7 @@
             <td th:text="${u.role != null ? u.role.name : '—'}">role</td>
             <td>
               <span th:if="${u.status.name() == 'ACTIVE'}" class="app-badge app-badge-success">Active</span>
-              <span th:if="${u.status.name() == 'LOCKED'}" class="app-badge app-badge-warning"><i class="bi bi-lock-fill me-1"></i>Locked</span>
+              <span th:if="${u.status.name() == 'LOCKED'}" class="app-badge app-badge-warning"><i class="ph-fill ph-lock me-1"></i>Locked</span>
               <span th:if="${u.status.name() == 'INACTIVE'}" class="app-badge app-badge-danger">Inactive</span>
             </td>
             <td th:text="${u.createdAt != null ? #temporals.format(u.createdAt, 'yyyy-MM-dd') : '—'}">date</td>

@@ -22,18 +22,18 @@
 
   <!-- Not active -->
   <div th:unless="${isActive}" class="app-alert app-alert-warning">
-    <i class="bi bi-info-circle" style="font-size:20px;"></i><span>This position is no longer accepting applications.</span>
+    <i class="ph-bold ph-info" style="font-size:20px;"></i><span>This position is no longer accepting applications.</span>
   </div>
 
   <!-- Guest prompt -->
   <div th:if="${isActive and isGuest}" class="app-alert app-alert-info">
-    <i class="bi bi-info-circle" style="font-size:20px;"></i>
+    <i class="ph-bold ph-info" style="font-size:20px;"></i>
     <span>Sign in or create an account to apply. <a th:href="@{/login}">Sign in</a> · <a th:href="@{/register}">Create account</a></span>
   </div>
 
   <!-- Already applied -->
   <div th:if="${isActive and alreadyApplied}" class="app-alert app-alert-warning">
-    <i class="bi bi-info-circle" style="font-size:20px;"></i>
+    <i class="ph-bold ph-info" style="font-size:20px;"></i>
     <span>You have already applied for this position. <a th:href="@{/my-applications}">Track its status in My Applications.</a></span>
   </div>
 
