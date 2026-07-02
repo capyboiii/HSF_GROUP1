@@ -21,15 +21,15 @@
       </div>
       <div class="col-md-4 text-md-end">
         <span class="app-badge app-badge-info mb-2" th:text="${app.status}">STATUS</span><br>
-        <a th:if="${app.cvFileUrl != null}" th:href="${app.cvFileUrl}" class="app-btn app-btn-outline btn-sm mt-2"><i class="ph-bold ph-download-simple me-1"></i>Download CV</a>
+        <a th:if="${app.cvFileUrl != null}" th:href="${app.cvFileUrl}" class="app-btn app-btn-outline btn-sm mt-2"><i class="fa-solid fa-download me-1"></i>Download CV</a>
       </div>
     </div>
   </div>
 
   <!-- Terminal-state banners -->
-  <div th:if="${app.status.name() == 'HIRED'}" class="app-alert app-alert-success"><i class="ph-bold ph-check-circle" style="font-size:20px;"></i><span>This candidate has been hired.</span></div>
-  <div th:if="${app.status.name() == 'REJECTED'}" class="app-alert app-alert-danger"><i class="ph-bold ph-x-circle" style="font-size:20px;"></i><span>This candidate has been rejected.</span></div>
-  <div th:if="${app.status.name() == 'WITHDRAWN'}" class="app-alert app-alert-warning"><i class="ph-bold ph-info" style="font-size:20px;"></i><span>This candidate withdrew their application.</span></div>
+  <div th:if="${app.status.name() == 'HIRED'}" class="app-alert app-alert-success"><i class="fa-solid fa-circle-check" style="font-size:20px;"></i><span>This candidate has been hired.</span></div>
+  <div th:if="${app.status.name() == 'REJECTED'}" class="app-alert app-alert-danger"><i class="fa-solid fa-circle-xmark" style="font-size:20px;"></i><span>This candidate has been rejected.</span></div>
+  <div th:if="${app.status.name() == 'WITHDRAWN'}" class="app-alert app-alert-warning"><i class="fa-solid fa-circle-info" style="font-size:20px;"></i><span>This candidate withdrew their application.</span></div>
 
   <!-- ===== Manager (HR/Admin) actions ===== -->
   <div th:if="${isManager}">
@@ -43,7 +43,7 @@
           <button class="app-btn app-btn-danger">Reject</button>
         </form>
         <a th:if="${app.status.name() == 'INTERVIEW'}" th:href="@{'/applications/' + ${app.id} + '/assign-interview'}" class="app-btn app-btn-secondary">
-          <i class="ph-bold ph-calendar-plus me-1"></i>Interview Assignment
+          <i class="fa-solid fa-calendar-plus me-1"></i>Interview Assignment
         </a>
       </div>
     </div>
@@ -98,7 +98,7 @@
            th:href="@{'/applications/' + ${app.id} + '/evaluate'(interviewId=${myInterview.id})}"
            class="app-btn app-btn-primary">Submit Evaluation</a>
         <div th:if="${myInterview.status.name() == 'EVALUATED'}">
-          <div class="app-alert app-alert-success mb-2"><i class="ph-bold ph-check-circle" style="font-size:20px;"></i><span>You have submitted your evaluation for this candidate.</span></div>
+          <div class="app-alert app-alert-success mb-2"><i class="fa-solid fa-circle-check" style="font-size:20px;"></i><span>You have submitted your evaluation for this candidate.</span></div>
           <div th:if="${myInterview.evaluation != null}">
             <span class="text-warning" th:text="${'★'.repeat(myInterview.evaluation.rating)} + ${'☆'.repeat(5 - myInterview.evaluation.rating)}">stars</span>
             <div style="white-space: pre-wrap;" th:text="${myInterview.evaluation.feedback}">feedback</div>

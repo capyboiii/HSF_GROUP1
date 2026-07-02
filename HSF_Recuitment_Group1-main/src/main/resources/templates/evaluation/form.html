@@ -13,7 +13,7 @@
 
   <!-- Already submitted: read-only -->
   <div class="app-card" style="max-width: 640px;" th:if="${alreadyEvaluated}">
-    <div class="app-alert app-alert-success mb-3"><i class="ph-bold ph-check-circle" style="font-size:20px;"></i>
+    <div class="app-alert app-alert-success mb-3"><i class="fa-solid fa-circle-check" style="font-size:20px;"></i>
       <span th:text="'You submitted this evaluation on ' + (${evaluation != null and evaluation.submittedAt != null} ? ${#temporals.format(evaluation.submittedAt, 'yyyy-MM-dd')} : '')">Submitted.</span></div>
     <div th:if="${evaluation != null}">
       <div class="mb-2 text-warning fs-5" th:text="${'★'.repeat(evaluation.rating)} + ${'☆'.repeat(5 - evaluation.rating)}">stars</div>
@@ -41,7 +41,7 @@
         <textarea name="feedback" class="app-form-control" rows="5" th:text="${feedback}" required></textarea>
         <div class="text-danger small" th:if="${errors != null and errors.feedback}" th:text="${errors.feedback}"></div>
       </div>
-      <div class="app-alert app-alert-warning mb-3"><i class="ph-bold ph-warning" style="font-size:20px;"></i>
+      <div class="app-alert app-alert-warning mb-3"><i class="fa-solid fa-triangle-exclamation" style="font-size:20px;"></i>
         <span>Once submitted, your evaluation cannot be edited or withdrawn.</span></div>
       <div class="d-flex gap-2 border-top pt-3">
         <button type="submit" class="app-btn app-btn-primary">Submit Evaluation</button>

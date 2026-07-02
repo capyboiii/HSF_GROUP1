@@ -1,4 +1,4 @@
-/* Dark-mode toggle — follows ui-skill.md §10.
+/* Dark-mode toggle — follows ui-skill.md §9.
    Uses Bootstrap's data-bs-theme attribute and persists the choice under the
    localStorage key "theme". The anti-flash snippet is inlined at the top of
    <head> in each layout; this file handles toggling + icon state, plus the
@@ -16,13 +16,13 @@ function updateThemeIcons() {
   var isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
   var icons = document.querySelectorAll('[data-theme-icon]');
   for (var i = 0; i < icons.length; i++) {
-    icons[i].className = (isDark ? 'ph-fill ph-sun' : 'ph-fill ph-moon-stars');
+    icons[i].className = (isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon');
     icons[i].setAttribute('data-theme-icon', '');
   }
 }
 
-/* Scroll-entry reveal (ui-skill.md §7): fade + translateY(12px) via
-   IntersectionObserver, staggered per index — never scroll listeners. */
+/* Scroll-entry reveal (ui-skill.md §7): fade + translateY(16px) via a single
+   non-blocking IntersectionObserver — GPU-accelerated properties only. */
 function initReveal() {
   if (!('IntersectionObserver' in window)) { return; }
   var targets = document.querySelectorAll('.app-card, .card, .app-table-wrapper');
@@ -35,7 +35,7 @@ function initReveal() {
     }
   }, { threshold: 0.1 });
   for (var j = 0; j < targets.length; j++) {
-    targets[j].classList.add('reveal');
+    targets[j].classList.add('reveal-on-scroll');
     targets[j].style.transitionDelay = ((j % 6) * 80) + 'ms';
     observer.observe(targets[j]);
   }
