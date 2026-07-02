@@ -164,7 +164,8 @@ hr { border-color: var(--gray-border); opacity: 1; }
 .app-badge-success { background-color: #EBF7EE; color: #2F6A3E; }
 .app-badge-warning { background-color: #FEF9E7; color: #8F6B00; }
 .app-badge-danger  { background-color: #FDF1F2; color: #A63A3A; }
-.app-badge-info    { background-color: #E6F4EA; color: #2B6CB0; }
+/* Spec's Pale Blue BG (#E6F4EA) is a green — corrected to a true pale blue */
+.app-badge-info    { background-color: #EAF3FB; color: #2B6CB0; }
 .app-badge-secondary { background-color: #F4F3EF; color: #757575; }
 .badge.bg-secondary {
   background-color: #F4F3EF !important;
@@ -183,7 +184,25 @@ hr { border-color: var(--gray-border); opacity: 1; }
   border-color: var(--gray-border);
 }
 .app-table td, .table td { border-color: var(--gray-border); vertical-align: middle; }
+.app-table td { color: var(--ink); font-size: var(--small-size); }
 .app-table tbody tr:hover, .table-hover tbody tr:hover { background-color: var(--surface-alt); }
+
+/* Responsive guards — nothing may clip or overflow (ui-skill.md §6/§8).
+   Skeleton's table.css sets overflow:hidden on the wrapper, which clips
+   wide tables; scroll horizontally instead, like .table-responsive. */
+.app-table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.app-table th { white-space: nowrap; }
+.app-table td .d-flex { flex-wrap: nowrap; }
+
+/* Compact size for table action buttons — skeleton's .app-btn ignores
+   Bootstrap's .btn-sm (that class only works together with .btn). */
+.app-btn.btn-sm { padding: 4px 10px; font-size: 0.8rem; white-space: nowrap; }
+.app-btn { white-space: nowrap; }
+
+/* Page headers (h1 + action button) may wrap on small screens */
+@media (max-width: 576px) {
+  .app-viewport-content .d-flex.justify-content-between { flex-wrap: wrap; gap: 8px; }
+}
 
 /* ---------- 7. Forms: crisp, no blue glow ---------- */
 .form-control, .form-select, .app-form-control {
@@ -197,6 +216,28 @@ hr { border-color: var(--gray-border); opacity: 1; }
 }
 .form-check-input:checked { background-color: #111111; border-color: #111111; }
 .form-check-input:focus { box-shadow: none; border-color: #111111; }
+
+/* Skeleton's .app-form-control inside a Bootstrap .input-group:
+   its width:100% breaks the flex row and pushes the button to the
+   next line — restore input-group flex behaviour. */
+.input-group > .app-form-control { flex: 1 1 auto; width: 1%; min-width: 0; }
+.input-group .app-btn { border-radius: 0 4px 4px 0; }
+
+/* Tabs: flat editorial underline, never Bootstrap blue */
+.nav-tabs { border-bottom: 1px solid var(--gray-border); }
+.nav-tabs .nav-link {
+  color: var(--gray-text);
+  border: 0;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  background: transparent;
+}
+.nav-tabs .nav-link:hover { color: #111111; border-bottom-color: var(--gray-border); }
+.nav-tabs .nav-link.active { color: #111111; background: transparent; border-bottom: 2px solid #111111; }
+
+/* Hover underline is for prose links only — never for controls */
+a.btn:hover, a.app-btn:hover, .nav-link:hover, .app-sidebar-link:hover,
+.dropdown-item:hover, .page-link:hover, .app-navbar-brand:hover { text-decoration: none; }
 
 /* Accordions: flush, hairline separators, no focus ring (§4) */
 .accordion-item { border: 0; border-bottom: 1px solid var(--gray-border); background: transparent; }
@@ -212,9 +253,9 @@ hr { border-color: var(--gray-border); opacity: 1; }
   color: #FFFFFF;
 }
 
-/* Links: ink, not saturated blue */
-a { color: #111111; }
-a:hover { color: #2A2A2A; }
+/* Links: ink, not saturated blue; underline only on hover */
+a { color: #111111; text-decoration: none; }
+a:hover { color: #2A2A2A; text-decoration: underline; }
 
 /* Sidebar: deep charcoal panel (driven by --primary token) */
 .app-sidebar-link { font-size: var(--small-size); }
@@ -224,7 +265,7 @@ a:hover { color: #2A2A2A; }
 .alert-success, .app-alert-success { background-color: #EBF7EE; border-color: #D8EBDD; color: #2F6A3E; }
 .alert-danger,  .app-alert-danger  { background-color: #FDF1F2; border-color: #F3DCDE; color: #A63A3A; }
 .alert-warning, .app-alert-warning { background-color: #FEF9E7; border-color: #F1E6BE; color: #8F6B00; }
-.alert-info,    .app-alert-info    { background-color: #E6F4EA; border-color: #CFE7F3; color: #2B6CB0; }
+.alert-info,    .app-alert-info    { background-color: #EAF3FB; border-color: #D4E5F5; color: #2B6CB0; }
 
 /* ---------- 8. Scroll-entry micro-animation (§7) ---------- */
 /* .reveal-on-scroll is attached automatically by theme.js via

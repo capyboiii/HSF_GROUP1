@@ -5,13 +5,11 @@
 <section>
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h1 class="mb-0">Open Positions</h1>
-    <a th:if="${isGuest}" th:href="@{/login}" class="app-btn app-btn-outline btn-sm">Sign In</a>
   </div>
 
   <div th:if="${isGuest}" class="app-alert app-alert-info mb-3">
     <i class="fa-solid fa-circle-info" style="font-size:20px;"></i>
-    <span>Sign in or <a th:href="@{/register}">create an account</a> to apply for positions.
-      <a th:href="@{/login}">Sign in</a></span>
+    <span><a th:href="@{/login}">Sign in</a> or <a th:href="@{/register}">create an account</a> to apply for positions.</span>
   </div>
 
   <form method="get" class="app-card mb-3">

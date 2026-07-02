@@ -13,25 +13,25 @@
 
   <div class="row g-3 mb-4">
     <div class="col-md-3">
-      <div class="app-card"><div class="text-muted">Total users</div>
-        <div class="h3 fw-bold mb-2" th:text="${totalUsers}">0</div>
+      <div class="app-card h-100"><div class="text-muted">Total users</div>
+        <div class="display-6 fw-bold mb-2" th:text="${totalUsers}">0</div>
         <div class="small text-muted" th:each="rc : ${roleCounts}">
           <span th:text="${rc.key}"></span>: <span th:text="${rc.value}"></span>
         </div>
       </div>
     </div>
     <div class="col-md-3" th:if="${lockedCount > 0}">
-      <a th:href="@{/admin/users(status='LOCKED')}" class="text-decoration-none">
-        <div class="app-card"><div class="text-muted">Locked accounts</div>
+      <a th:href="@{/admin/users(status='LOCKED')}" class="text-decoration-none d-block h-100">
+        <div class="app-card h-100"><div class="text-muted">Locked accounts</div>
           <div class="display-6 fw-bold text-danger" th:text="${lockedCount}">0</div></div>
       </a>
     </div>
     <div class="col-md-3">
-      <div class="app-card"><div class="text-muted">Active jobs</div>
+      <div class="app-card h-100"><div class="text-muted">Active jobs</div>
         <div class="display-6 fw-bold" th:text="${stats.activeJobs()}">0</div></div>
     </div>
     <div class="col-md-3">
-      <div class="app-card"><div class="text-muted">Applications awaiting review</div>
+      <div class="app-card h-100"><div class="text-muted">Applications awaiting review</div>
         <div class="display-6 fw-bold" th:text="${stats.applicationsAwaitingReview()}">0</div></div>
     </div>
   </div>
@@ -48,7 +48,7 @@
               <tr th:each="log : ${recentActivity}">
                 <td th:text="${log.eventType}">EVENT</td>
                 <td th:text="${log.user != null ? log.user.username : '—'}">actor</td>
-                <td th:text="${log.timestamp}">time</td>
+                <td class="text-muted" th:text="${log.timestamp != null ? #temporals.format(log.timestamp, 'yyyy-MM-dd HH:mm') : '—'}">time</td>
               </tr>
             </tbody>
           </table>

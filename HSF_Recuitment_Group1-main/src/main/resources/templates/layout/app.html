@@ -31,13 +31,14 @@
     .app-main-frame { min-height: 100dvh; display: flex; flex-direction: column; }
     .app-viewport-content { padding: var(--content-padding, 24px); flex: 1; }
     @media (min-width: 768px) { .app-main-frame { margin-left: var(--sidebar-width, 240px); } }
+    .app-main-frame.no-sidebar { margin-left: 0; }
     .app-sidebar-link.active { font-weight: 600; }
   </style>
 </head>
 <body>
 
-  <!-- Role-aware sidebar -->
-  <div class="app-sidebar">
+  <!-- Role-aware sidebar (hidden for guests — no menu to show) -->
+  <div class="app-sidebar" th:if="${currentUser != null}">
     <div class="app-sidebar-logo">
       <i class="fa-solid fa-building me-2"></i><span>TalentHub</span>
     </div>
@@ -60,7 +61,7 @@
     </ul>
   </div>
 
-  <div class="app-main-frame">
+  <div class="app-main-frame" th:classappend="${currentUser == null} ? ' no-sidebar' : ''">
     <!-- Header -->
     <div class="app-navbar">
       <a th:href="@{/}" class="app-navbar-brand">TalentHub</a>
